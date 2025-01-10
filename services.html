@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dream Abode - Transforming Spaces Into Dreams</title>
+  <style>
+    /* Modern CSS Reset */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Custom Properties */
+    :root {
+      --primary: #FF4500;
+      --primary-light: #FF6B3D;
+      --secondary: #2A2A2A;
+      --text: #333333;
+      --background: #FFFFFF;
+      --card-bg: #FFFFFF;
+      --section-bg-1: linear-gradient(135deg, #FFF5F5 0%, #FFF0F5 100%);
+      --section-bg-2: linear-gradient(135deg, #FFF8F0 0%, #FFE4E1 100%);
+      --gradient: linear-gradient(135deg, var(--primary) 0%, #FF8C69 100%);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      --border-radius: 12px;
+    }
+
+    /* Dark Mode Variables */
+    [data-theme="dark"] {
+      --primary: #FFA500;
+      --primary-light: #FFB733;
+      --secondary: #E0E0E0;
+      --text: #F5F5F5;
+      --background: #121212;
+      --card-bg: #1E1E1E;
+      --section-bg-1: linear-gradient(135deg, #1A1A1A 0%, #202020 100%);
+      --section-bg-2: linear-gradient(135deg, #202020 0%, #1A1A1A 100%);
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.6;
+      color: var(--text);
+      background: var(--background);
+      transition: var(--transition);
+    }
+
+    /* Typography */
+    h1, h2, h3 {
+      color: var(--text);
+    }
+
+    h1 {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 2rem;
+    }
+
+    h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      color: var(--primary);
+    }
+
+    p {
+      font-size: 1.125rem;
+      line-height: 1.7;
+      opacity: 0.9;
+    }
+
+    /* Enhanced Dark Mode Toggle */
+    .dark-mode-toggle {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      z-index: 1000;
+      background: var(--card-bg);
+      padding: 0.75rem;
+      border-radius: 50%;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .dark-mode-toggle:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .theme-toggle {
+      display: none;
+    }
+
+    .theme-icon {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .sun-icon, .moon-icon {
+      position: absolute;
+      transition: var(--transition);
+    }
+
+    .sun-icon {
+      color: #FFB700;
+    }
+
+    .moon-icon {
+      color: #5C8BC7;
+      opacity: 0;
+    }
+
+    [data-theme="dark"] .sun-icon {
+      opacity: 0;
+      transform: rotate(180deg);
+    }
+
+    [data-theme="dark"] .moon-icon {
+      opacity: 1;
+      transform: rotate(0);
+    }
+
+    /* Home Section */
+    #home {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .home-content {
+      max-width: 800px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .home-content h1 {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1.5rem;
+    }
+
+    .home-content p {
+      font-size: clamp(1.25rem, 2vw, 1.5rem);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Cards Layout */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      padding: 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+      opacity: 0; /* Initially hidden */
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--gradient);
+    }
+
+    /* Sections */
+    section {
+      padding: 6rem 2rem;
+    }
+
+    #problems {
+      background: var(--section-bg-1);
+    }
+
+    #solution {
+      background: var(--section-bg-2);
+    }
+
+    /* Contact Section */
+    /* Contact Section */
+    #contact {
+    background: var(--primary); /* Orange in light mode */
+    color: var(--secondary); /* Black in light mode */
+    text-align: center;
+    padding: 4rem 2rem;
+    }
+
+    [data-theme="dark"] #contact {
+    background: var(--background); /* Black in dark mode */
+    color: var(--primary); /* Orange in dark mode */
+    }
+
+    #contact a {
+    display: inline-block;
+    margin-top: 1.5rem;
+    padding: 1rem 2rem;
+    background: var(--secondary); /* Black in light mode */
+    color: var(--primary); /* Orange in light mode */
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    transition: var(--transition);
+    }
+
+    [data-theme="dark"] #contact a {
+    background: var(--primary); /* Orange in dark mode */
+    color: var(--background); /* Black in dark mode */
+    }
+
+    #contact a:hover {
+    background: var(--primary-light);
+    color: var(--secondary);
+    transform: translateY(-2px);
+    text-decoration: none;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      section {
+        padding: 4rem 1rem;
+      }
+
+      .card-grid {
+        padding: 1rem;
+        gap: 1rem;
+      }
+    }
+
+    /* Left Slide-In Animation */
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-100%);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* Right Slide-In Animation */
+    @keyframes slideInRight {
+      from {
+        opacity: 0;
+        transform: translateX(100%);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* Apply Animations to Sections */
+    #problems .card {
+      animation: slideInLeft 0.8s ease-out forwards;
+    }
+
+    #solution .card {
+      animation: slideInRight 0.8s ease-out forwards;
+    }
+
+    /* Delay Animations for Each Card */
+    #problems .card:nth-child(1) { animation-delay: 0.2s; }
+    #problems .card:nth-child(2) { animation-delay: 0.4s; }
+    #problems .card:nth-child(3) { animation-delay: 0.6s; }
+    #problems .card:nth-child(4) { animation-delay: 0.8s; }
+
+    #solution .card:nth-child(1) { animation-delay: 0.2s; }
+    #solution .card:nth-child(2) { animation-delay: 0.4s; }
+    #solution .card:nth-child(3) { animation-delay: 0.6s; }
+    #solution .card:nth-child(4) { animation-delay: 0.8s; }
+
+    /* Heading Animations */
+    @keyframes slideInLeftHeading {
+      from {
+        opacity: 0;
+        transform: translateX(-100%);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes slideInRightHeading {
+      from {
+        opacity: 0;
+        transform: translateX(100%);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* Apply Animations to Headings */
+    #problems h2 {
+      animation: slideInLeftHeading 0.8s ease-out forwards;
+      opacity: 0; /* Initially hidden */
+    }
+
+    #solution h2 {
+      animation: slideInRightHeading 0.8s ease-out forwards;
+      opacity: 0; /* Initially hidden */
+    }
+  </style>
+</head>
+<body>
+  <div class="dark-mode-toggle">
+    <input type="checkbox" id="theme-toggle" class="theme-toggle">
+    <label for="theme-toggle" class="theme-icon">
+      <svg class="sun-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <svg class="moon-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </label>
+  </div>
+
+  <section id="home">
+    <div class="home-content">
+      <h1>Dream Abode</h1>
+      <p>Crafting extraordinary living spaces where innovation meets sustainability, and your dreams find their perfect home.</p>
+    </div>
+  </section>
+
+  <section id="problems">
+    <h2>Challenges We Address</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h3>Living Space Optimization</h3>
+        <p>Many Indian households struggle with space utilization, leading to decreased comfort and functionality in their daily lives. Our innovative design solutions transform cramped spaces into efficient, breathable environments.</p>
+      </div>
+      <div class="card">
+        <h3>Environmental Impact</h3>
+        <p>Traditional interior materials often contain harmful chemicals that affect both human health and the environment. We prioritize eco-friendly materials that ensure your well-being while protecting our planet.</p>
+      </div>
+      <div class="card">
+        <h3>Design Visualization</h3>
+        <p>Understanding how a design will look in real space can be challenging. Our advanced AR technology brings your vision to life before implementation, ensuring complete satisfaction with the final result.</p>
+      </div>
+      <div class="card">
+        <h3>Budget Management</h3>
+        <p>Unclear project scope often leads to budget overruns. We provide detailed cost breakdowns and transparent pricing, helping you make informed decisions while avoiding unnecessary expenses.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="solution">
+    <h2>Our Approach</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h3>Immersive Design Experience</h3>
+        <p>Experience your future space through our cutting-edge AR technology, allowing you to visualize and refine every detail before implementation.</p>
+      </div>
+      <div class="card">
+        <h3>Inclusive Design Solutions</h3>
+        <p>We create spaces that cater to all age groups, ensuring comfort and functionality for everyone in your household.</p>
+      </div>
+      <div class="card">
+        <h3>Transparent Process</h3>
+        <p>Our professional team provides detailed timelines and cost estimates. We offer a 40% fee reduction if we exceed agreed timelines, ensuring accountability.</p>
+      </div>
+      <div class="card">
+        <h3>Eco-Conscious Living</h3>
+        <p>We source sustainable materials and implement energy-efficient solutions, creating healthy living spaces that minimize environmental impact.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Transform Your Space</h2>
+    <p>Ready to begin your journey towards a dream living space? Let's create something extraordinary together.</p>
+    <a href="mailto:info@dreamabode.com">Contact Us Today</a>
+  </section>
+
+  <script>
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+
+    // Check for saved preference
+    if (localStorage.getItem('theme') === 'dark') {
+      body.setAttribute('data-theme', 'dark');
+      themeToggle.checked = true;
+    }
+
+    // Toggle theme
+    themeToggle.addEventListener('change', () => {
+      if (themeToggle.checked) {
+        body.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        body.setAttribute('data-theme', 'light');
+        localStorage.setItem('theme', 'light');
+      }
+    });
+
+    // Intersection Observer for animation
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateX(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.card, #problems h2, #solution h2').forEach(element => observer.observe(element));
+  </script>
+</body>
+</html>
